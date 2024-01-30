@@ -1,0 +1,171 @@
+<div id = "tablero" >
+    <head>
+
+        <style>
+            .tablero {
+                display: grid;
+                grid-template-columns: repeat(8, 50px); 
+                grid-template-rows: repeat(8, 50px); 
+            }
+    
+            .casilla {
+                width: 50px; 
+                height: 50px;
+                text-align: center;
+                line-height: 50px;
+                font-size: 14px;
+                border: 1px solid #ccc;
+                z-index:1;
+                display:flex;
+                align-items: center;
+                justify-content: center;      
+            }
+            .casilla > button{
+                margin: 0 auto;
+                background-color: transparent;
+                border : none;
+            }
+    
+            .blanca {
+                background-color: #f8f25c;
+            }
+    
+            .negra {
+                background-color: #c98206; 
+            }
+            .pintadas {
+                background-color: #19f65b; 
+
+            }
+            .pieza {
+            background-color: transparent;
+            object-fit: cover;
+            width:50px;
+            height:50px;
+            z-index: 9999;
+            color:#f0f0f0;
+            background-size:contain;
+            margin: auto;
+        }
+        
+            
+        </style>
+    </head>
+  
+    <body>
+        <div class="tablero" id="tablero-container"></div>
+
+        <script>
+           
+             function inicializarTablero() {
+             for (let fil = 0; fil < 8; fil++) {
+                for (let col = 0; col < 8; col++) {
+                let casilla = crearCasilla(fil, col);
+                //document.getElementById("tablero-container").appendChild(casilla);
+                    if(fil==1){
+                     crearPieza(casilla, "peonNegro");
+                    }
+                    if(fil==6){
+                        crearPieza(casilla,"peonBlanco");
+                    }
+                    if(fil==0 && (col==2||col==5)){
+                        crearPieza(casilla,"alfilNegro");
+                    }
+                    if(fil==7 && (col==2||col==5)){
+                        crearPieza(casilla,"alfilBlanco");
+                    }
+                    if(fil==0 && (col==0||col==7)){
+                        crearPieza(casilla,"torreNegra");
+                    }
+                    if(fil==7 && (col==0||col==7)){
+                        crearPieza(casilla,"torreBlanca");
+                    }
+                    if(fil==0 && (col==1||col==6)){
+                        crearPieza(casilla,"caballoNegro");
+                    }
+                    if(fil==7 && (col==1||col==6)){
+                        crearPieza(casilla,"caballoBlanco");
+                    }
+                    if(fil==0 && col==3){
+                        crearPieza(casilla,"damaNegra");
+                    }
+                    if(fil==7 && col==3){
+                        crearPieza(casilla,"damaBlanca");
+                    }
+                    if(fil==0 && col==4){
+                        crearPieza(casilla,"reyNegro");
+                    }
+                    if(fil==7 && col==4){
+                        crearPieza(casilla,"reyBlanco");
+                    }
+                }
+             }
+            }
+            function crearCasilla(fil, col) {
+                let casilla = document.createElement("div");
+                casilla.classList.add("casilla", (fil + col) % 2 === 0 ? "blanca" : "negra");
+                casilla.setAttribute('id', `${fil}/${col}`)
+                // return casilla;
+                document.getElementById("tablero-container").appendChild(casilla);
+                return `${fil}/${col}`;
+            }
+
+
+         
+            function crearPieza(casilla,tipo) {
+                let boton = document.createElement("button");
+                boton.setAttribute('id',tipo+"/"+casilla);
+                if(tipo=="peonBlanco"||tipo=="peonNegro"){
+                    let a = casilla.split("/");
+                    let fil = a[0];
+                    let col = a[1];
+                    let casilla2 = {"fil":fil,"col":col}
+                    boton.setAttribute('onClick',`moverPeon(${fil},${col},${tipo})`)
+                }
+                let casilla2 = document.getElementById(casilla);
+                let pieza = document.createElement("img");
+                
+                pieza.setAttribute('id',tipo);
+                pieza.src = `./cliente/img/${tipo}.png`;
+                pieza.classList.add("pieza");
+                boton.appendChild(pieza);
+                casilla2.appendChild(boton);
+            }
+            function calcularEstado(){
+                let estadoPartida={};
+                let codigoPartida = $.cookie("codigoPartida");
+                for (let fil = 0; fil < 8; fil++) {
+                    for (let col = 0; col < 8; col++) {
+                        let cas = document.getElementById(fil+"/"+col);
+                        let button = cas.querySelector('button');
+                        if(button){
+                            let array = button.id.split("/");
+                            let tipo = array[0];
+                            let fil = array[1];
+                            let col = array[2];
+                            estadoPartida[tipo+"/"+fil+"/"+col]={"casilla":{
+                                    "fil":fil,
+                                    "col":col
+                                },
+                            "tipo":tipo};
+                        }
+                    }
+                }
+                return {"estadoPartida":estadoPartida,"codigoPartida":codigoPartida};
+
+            }
+            function moverPeon(fil, col,tipo){
+                let estadoPartida=calcularEstado();
+              
+                console.log(fil, col);
+                let casilla = {"fil":fil,"col":col};
+                let seleccionada = document.getElementById(fil+"/"+col);
+                seleccionada.classList.add('seleccionada');
+                ws.moverPeon(casilla,estadoPartida);
+
+            }
+        </script>
+    </body>
+</div>
+
+</div>

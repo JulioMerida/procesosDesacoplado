@@ -1,0 +1,32 @@
+{
+  "name": "procesos",
+  "version": "1.0.0",
+  "description": "arquitectura base de la asignatura procesos del curso 23 24",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js test=false",
+    "dev": "nodemon index.js test=false",
+    "testW": "node_modules\\.bin\\jasmine servidor\\modeloSpec.js",
+    "test": "./node_modules/.bin/jasmine servidor"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/secret-manager": "^5.0.1",
+    "axios": "^1.6.5",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
+    "cookie-session": "^2.0.0",
+    "express": "^4.18.2",
+    "http": "^0.0.1-security",
+    "jasmine": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
+    "mongodb": "^4.4.0",
+    "nodemailer": "6.9.7",
+    "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
